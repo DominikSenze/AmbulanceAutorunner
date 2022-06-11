@@ -4,36 +4,55 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
 {
+    private Rigidbody2D myRigidbody;
+    //private Collider2D myCollider;
+
     public float moveSpeed;
     public float jumpForce;
-
-    private Rigidbody2D myRigidbody;
-    private Collider2D myCollider;
-
-    //variables for Ground Check
-    public bool grounded;
-    public LayerMask IsGround;
 
     //variables for higher Jump
     private float jumpTimeCounter;
     public float jumpTime;
     private bool isJumping;
 
+    //viables for increasing speed
+    public float speedMultiplier;
+    public float speedIncreaseMilestone;
+    private float speedMilestoneCount;
+        
+    //variables for Ground Check
+    public bool grounded;
+    public LayerMask IsGround;
+    public Transform groundCheck;
+    public float groundCheckRadius;
+
+    
+
     // -------------------------------------------------------------------------------
     // Start is called before the first frame update
     void Start()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
-        myCollider = GetComponent<Collider2D>();
+        //myCollider = GetComponent<Collider2D>();
+
+        speedMilestoneCount = speedIncreaseMilestone;
     }
 
     // Update is called once per frame
     void Update()
     {
-        grounded = Physics2D.IsTouchingLayers(myCollider, IsGround); //grounded is true if player-collider is touching isGround-collider
+        grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, IsGround);
 
-        myRigidbody.velocity = new Vector2(moveSpeed, myRigidbody.velocity.y); //Moving forward
+        //speed increasing when player reaches Milestone
+        if(transform.position.x > speedMilestoneCount)
+        {
+            speedMilestoneCount += speedIncreaseMilestone;
+            speedIncreaseMilestone = speedIncreaseMilestone * speedMultiplier; //increasing distance of Milestones
+            moveSpeed = moveSpeed * speedMultiplier; //increasing movement speed
+        }
 
+        //moving & jumping
+        myRigidbody.velocity = new Vector2(moveSpeed, myRigidbody.velocity.y);
         Jumping();
 
     }

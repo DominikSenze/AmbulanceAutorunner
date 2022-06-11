@@ -20,30 +20,51 @@ public class PlatformGenerator : MonoBehaviour
     //reference to the ObjectPooler-Script
     public ObjectPooler[] theObjectPools;
 
+    //Variables for height difference
+    private float minHeight;
+    private float maxHeight;
+    public Transform maxHeightPoint;
+    public float maxHeightChange;
+    private float heightChange;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        //platformWidth = thePlatform.GetComponent<BoxCollider2D>().size.x; //gives us the length of platform
-
         platformWidths = new float[theObjectPools.Length];
 
         for(int i =0; i<theObjectPools.Length; i++)
         {
             platformWidths[i] = theObjectPools[i].pooledObject.GetComponent<BoxCollider2D>().size.x;
         }
+
+        minHeight = transform.position.y;
+        maxHeight = maxHeightPoint.position.y;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(transform.position.x < generatorPoint.position.x) //creation of new platforms at PlatformGeneratorPoint
+        //creation of new platforms at PlatformGeneratorPoint
+        if (transform.position.x < generatorPoint.position.x) 
         {
             platformDistance = Random.Range(platformDistanceMin, platformDistanceMax); //choosing a distance
 
             platformSelector = Random.Range(0, theObjectPools.Length); //choosing one of the platform types
 
-            transform.position = new Vector3(transform.position.x + (platformWidths[platformSelector] /2) + platformDistance, transform.position.y, transform.position.z);
+            //choosing the platform height
+            heightChange = transform.position.y + Random.Range(maxHeightChange, -maxHeightChange); //change is current position + random maxHeightChange number
+            if(heightChange > maxHeight)
+            {
+                heightChange = maxHeight;
+            }
+            else if(heightChange < minHeight)
+            {
+                heightChange = minHeight;
+            }
+
+            //positioning the PlatformGeneratorPoint
+            transform.position = new Vector3(transform.position.x + (platformWidths[platformSelector] /2) + platformDistance, heightChange, transform.position.z);
 
             //creating new platform
             GameObject newPlatform = theObjectPools[platformSelector].GetPooledObject();
