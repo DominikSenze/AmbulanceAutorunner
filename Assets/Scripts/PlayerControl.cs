@@ -14,6 +14,7 @@ public class PlayerControl : MonoBehaviour
     private float jumpTimeCounter;
     public float jumpTime;
     private bool isJumping;
+    private bool canDoubleJump;
 
     //viables for increasing speed
     public float speedMultiplier;
@@ -69,6 +70,17 @@ public class PlayerControl : MonoBehaviour
 
                 //normal Jump
                 myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, jumpForce);
+
+                canDoubleJump = true;
+            }
+
+            //for double jump
+            if (!grounded && canDoubleJump)
+            {
+                myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, jumpForce);
+                jumpTimeCounter = jumpTime;
+                isJumping = false;
+                canDoubleJump = false;
             }
         }
 
