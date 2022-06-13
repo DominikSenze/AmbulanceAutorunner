@@ -8,6 +8,7 @@ public class PlayerControl : MonoBehaviour
     //private Collider2D myCollider;
 
     public float moveSpeed;
+    private float moveSpeedStore;
     public float jumpForce;
 
     //variables for higher Jump
@@ -19,13 +20,19 @@ public class PlayerControl : MonoBehaviour
     //viables for increasing speed
     public float speedMultiplier;
     public float speedIncreaseMilestone;
+    private float speedIncreaseMilestoneStore;
     private float speedMilestoneCount;
+    private float speedMilestoneCountStore;
         
     //variables for Ground Check
     public bool grounded;
     public LayerMask IsGround;
     public Transform groundCheck;
     public float groundCheckRadius;
+    
+
+    //reference for GameManager Script
+    public GameManager theGameManager;
 
     
 
@@ -37,13 +44,17 @@ public class PlayerControl : MonoBehaviour
         //myCollider = GetComponent<Collider2D>();
 
         speedMilestoneCount = speedIncreaseMilestone;
+
+        moveSpeedStore = moveSpeed;
+        speedMilestoneCountStore = speedMilestoneCount;
+        speedIncreaseMilestoneStore = speedIncreaseMilestone;
     }
 
     // Update is called once per frame
     void Update()
     {
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, IsGround);
-
+        
         //speed increasing when player reaches Milestone
         if(transform.position.x > speedMilestoneCount)
         {
@@ -56,6 +67,7 @@ public class PlayerControl : MonoBehaviour
         myRigidbody.velocity = new Vector2(moveSpeed, myRigidbody.velocity.y);
         Jumping();
 
+        
     }
 
     private void Jumping()
@@ -104,5 +116,20 @@ public class PlayerControl : MonoBehaviour
         {
             isJumping = false;
         }
+    }
+
+
+    //Game Over when collision
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.tag == "killer")
+        {
+            theGameManager.RestartGame();
+            moveSpeed = moveSpeedStore; //reseting movement speed
+            speedMilestoneCount = speedMilestoneCountStore; //reseting milestones
+            speedIncreaseMilestone = speedIncreaseMilestoneStore;
+        }  
+
+        
     }
 }
