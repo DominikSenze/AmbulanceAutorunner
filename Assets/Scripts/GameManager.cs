@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviour
 
     private PlatformDestroyer[] platformList;
 
+    //reference to ScoreManager Script
+    private ScoreManager theScoreManager;
+
 
 
     // Start is called before the first frame update
@@ -19,6 +22,8 @@ public class GameManager : MonoBehaviour
     {
         platformStartPoint = platformGenerator.position;
         playerStartPoint = thePlayer.transform.position;
+
+        theScoreManager = FindObjectOfType<ScoreManager>();
     }
 
     // Update is called once per frame
@@ -35,6 +40,8 @@ public class GameManager : MonoBehaviour
     //reseting the game
     public IEnumerator RestartGameCo() 
     {
+        theScoreManager.scoreIncrease = false; //stopping the score
+        
         thePlayer.gameObject.SetActive(false); //player becomes invisible when dying
         yield return new WaitForSeconds(0.5f); //adding some time-delay
 
@@ -47,5 +54,8 @@ public class GameManager : MonoBehaviour
         thePlayer.transform.position = playerStartPoint; //reseting player
         platformGenerator.position = platformStartPoint; //reseting platforms
         thePlayer.gameObject.SetActive(true); //player becomes visible again after reset to beginning
+
+        theScoreManager.scoreCount = 0; //reseting score
+        theScoreManager.scoreIncrease = true;
     }
 }
