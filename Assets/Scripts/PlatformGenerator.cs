@@ -27,6 +27,11 @@ public class PlatformGenerator : MonoBehaviour
     public float maxHeightChange;
     private float heightChange;
 
+    //variables for ending random platforms
+    public int platformCounter;
+    public int platformCounterEnd;
+    public GameObject goalPlatform;
+
 
     // Start is called before the first frame update
     void Start()
@@ -40,13 +45,16 @@ public class PlatformGenerator : MonoBehaviour
 
         minHeight = transform.position.y;
         maxHeight = maxHeightPoint.position.y;
+
+        //platformCounter = 0;
+        goalPlatform.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
         //creation of new platforms at PlatformGeneratorPoint
-        if (transform.position.x < generatorPoint.position.x) 
+        if (transform.position.x < generatorPoint.position.x && platformCounter < platformCounterEnd) 
         {
             platformDistance = Random.Range(platformDistanceMin, platformDistanceMax); //choosing a distance
 
@@ -74,6 +82,16 @@ public class PlatformGenerator : MonoBehaviour
 
             transform.position = new Vector3(transform.position.x + (platformWidths[platformSelector] /2), transform.position.y, transform.position.z);
 
+            platformCounter++;
         }
+        //placing the endgoal
+        else
+        {
+            goalPlatform.transform.position = transform.position;
+            goalPlatform.transform.rotation = transform.rotation;
+            goalPlatform.SetActive(true);
+        }
+
+        
     }
 }

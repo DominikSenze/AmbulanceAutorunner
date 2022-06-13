@@ -12,8 +12,9 @@ public class GameManager : MonoBehaviour
 
     private PlatformDestroyer[] platformList;
 
-    //reference to ScoreManager Script
+    //variables for reference to other Scripts
     private ScoreManager theScoreManager;
+    private PlatformGenerator thePlatformGenerator;
 
 
 
@@ -24,6 +25,7 @@ public class GameManager : MonoBehaviour
         playerStartPoint = thePlayer.transform.position;
 
         theScoreManager = FindObjectOfType<ScoreManager>();
+        thePlatformGenerator = FindObjectOfType<PlatformGenerator>();
     }
 
     // Update is called once per frame
@@ -55,7 +57,13 @@ public class GameManager : MonoBehaviour
         platformGenerator.position = platformStartPoint; //reseting platforms
         thePlayer.gameObject.SetActive(true); //player becomes visible again after reset to beginning
 
-        theScoreManager.scoreCount = 0; //reseting score
+        //reseting score
+        theScoreManager.scoreCount = 0; 
         theScoreManager.scoreIncrease = true;
+
+        //reseting end of random platforms and goal platform
+        thePlatformGenerator.platformCounter = 0; 
+        thePlatformGenerator.goalPlatform.SetActive(false);
+     
     }
 }
