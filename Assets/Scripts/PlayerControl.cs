@@ -27,8 +27,9 @@ public class PlayerControl : MonoBehaviour
     //variables for Ground Check
     public bool grounded;
     public LayerMask IsGround;
-    public Transform groundCheck;
-    public float groundCheckRadius;
+    public GameObject groundCheckFront;
+    public GameObject groundCheckBack;
+    
     
 
     //reference for GameManager Script
@@ -48,12 +49,15 @@ public class PlayerControl : MonoBehaviour
         moveSpeedStore = moveSpeed;
         speedMilestoneCountStore = speedMilestoneCount;
         speedIncreaseMilestoneStore = speedIncreaseMilestone;
+
+        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, IsGround);
+        grounded = Physics2D.OverlapArea(groundCheckFront.transform.position, groundCheckBack.transform.position, IsGround);
         
         //speed increasing when player reaches Milestone
         if(transform.position.x > speedMilestoneCount)
@@ -70,6 +74,7 @@ public class PlayerControl : MonoBehaviour
         
     }
 
+    
     private void Jumping()
     {
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) //normal Jump when Space or left mouse button pressed
