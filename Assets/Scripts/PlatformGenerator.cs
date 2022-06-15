@@ -32,6 +32,19 @@ public class PlatformGenerator : MonoBehaviour
     public int platformCounterEnd;
     public GameObject goalPlatform;
 
+    //variables for spawning AidKids
+    private CoinGenerator theCoinGenerator;
+    public float randomCoinThreshold; //controlls the amount of spawned aidKits
+
+    //variables for spawning enemys
+    public float randomEnemyThreshold;
+    public ObjectPooler enemyPool;
+
+    //variables for spawning PowerUps
+    public float powerUpHeight;
+    public ObjectPooler powerUpPool;
+    public float powerUpThreshold;
+
 
     // Start is called before the first frame update
     void Start()
@@ -48,6 +61,10 @@ public class PlatformGenerator : MonoBehaviour
 
         //platformCounter = 0;
         goalPlatform.SetActive(false);
+
+        //Finding and assigning the script CoinGenerator
+        theCoinGenerator = FindObjectOfType<CoinGenerator>();
+
     }
 
     // Update is called once per frame
@@ -71,6 +88,15 @@ public class PlatformGenerator : MonoBehaviour
                 heightChange = minHeight;
             }
 
+            //Spawning PowerUps
+            if(Random.Range(0f,100f) < powerUpThreshold)
+            {
+                GameObject newPowerUp = powerUpPool.GetPooledObject();
+
+                newPowerUp.transform.position = transform.position + new Vector3(platformDistance / 2f, powerUpHeight, 0f);
+                newPowerUp.SetActive(true);
+            }
+
             //positioning the PlatformGeneratorPoint
             transform.position = new Vector3(transform.position.x + (platformWidths[platformSelector] /2) + platformDistance, heightChange, transform.position.z);
 
@@ -79,6 +105,25 @@ public class PlatformGenerator : MonoBehaviour
             newPlatform.transform.position = transform.position;
             newPlatform.transform.rotation = transform.rotation;
             newPlatform.SetActive(true);
+
+            //spawns and positions the AidKits
+            if (Random.Range(0f,100f) < randomCoinThreshold)
+            {
+                theCoinGenerator.SpawnCoins(new Vector3(transform.position.x, transform.position.y + 0.6f, transform.position.z)); //the float controlls hight of aidKits
+            }
+
+            //spawns and positions the Enemy
+            if (Random.Range(0f, 100f) < randomEnemyThreshold && platformSelector > 1)
+            {
+                GameObject newEnemy = enemyPool.GetPooledObject();
+
+                Vector3 enemyPosition = new Vector3(0f, 0.3f, 0f);
+
+                newEnemy.transform.position = transform.position + enemyPosition;
+                newEnemy.transform.rotation = transform.rotation;
+                newEnemy.SetActive(true);
+                
+            }
 
             transform.position = new Vector3(transform.position.x + (platformWidths[platformSelector] /2), transform.position.y, transform.position.z);
 

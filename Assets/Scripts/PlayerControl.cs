@@ -7,6 +7,7 @@ public class PlayerControl : MonoBehaviour
     private Rigidbody2D myRigidbody;
     //private Collider2D myCollider;
 
+
     public float moveSpeed;
     private float moveSpeedStore;
     public float jumpForce;
@@ -16,6 +17,7 @@ public class PlayerControl : MonoBehaviour
     public float jumpTime;
     private bool isJumping;
     private bool canDoubleJump;
+    private bool isDoubleJumping;
 
     //viables for increasing speed
     public float speedMultiplier;
@@ -29,11 +31,16 @@ public class PlayerControl : MonoBehaviour
     public LayerMask IsGround;
     public GameObject groundCheckFront;
     public GameObject groundCheckBack;
-    
-    
+
+    //Animation Reference
+    private Animator myAnimator;
+
 
     //reference for GameManager Script
     public GameManager theGameManager;
+
+    //Checking if Powerup is collected
+    public bool hasPowerUp;
 
     
 
@@ -44,13 +51,15 @@ public class PlayerControl : MonoBehaviour
         myRigidbody = GetComponent<Rigidbody2D>();
         //myCollider = GetComponent<Collider2D>();
 
+        myAnimator = GetComponent<Animator>();
+
         speedMilestoneCount = speedIncreaseMilestone;
 
         moveSpeedStore = moveSpeed;
         speedMilestoneCountStore = speedMilestoneCount;
         speedIncreaseMilestoneStore = speedIncreaseMilestone;
 
-        
+        hasPowerUp = false;
 
     }
 
@@ -70,8 +79,18 @@ public class PlayerControl : MonoBehaviour
         //moving & jumping
         myRigidbody.velocity = new Vector2(moveSpeed, myRigidbody.velocity.y);
         Jumping();
-
         
+
+        myAnimator.SetFloat("Speed", myRigidbody.velocity.x);
+
+        myAnimator.SetBool("Grounded", grounded);
+
+        myAnimator.SetBool("DoubleJumping", isDoubleJumping);
+
+        myAnimator.SetBool("PowerUpCollected", hasPowerUp);
+
+
+
     }
 
     
@@ -98,6 +117,7 @@ public class PlayerControl : MonoBehaviour
                 jumpTimeCounter = jumpTime;
                 isJumping = false;
                 canDoubleJump = false;
+                isDoubleJumping = true;
             }
         }
 
@@ -121,6 +141,11 @@ public class PlayerControl : MonoBehaviour
         {
             isJumping = false;
         }
+
+        if (grounded)
+        {
+            isDoubleJumping = false;
+        }
     }
 
 
@@ -133,8 +158,21 @@ public class PlayerControl : MonoBehaviour
             moveSpeed = moveSpeedStore; //reseting movement speed
             speedMilestoneCount = speedMilestoneCountStore; //reseting milestones
             speedIncreaseMilestone = speedIncreaseMilestoneStore;
-        }  
+        }
 
-        
+        if (other.gameObject.tag == "enemy" && !hasPowerUp)
+        {
+            theGameManager.RestartGame();
+            moveSpeed = moveSpeedStore; //reseting movement speed
+            speedMilestoneCount = speedMilestoneCountStore; //reseting milestones
+            speedIncreaseMilestone = speedIncreaseMilestoneStore;
+        }
+
+        if (other.gameObject.tag == "enemy" && hasPowerUp)
+        {
+            other.gameObject.SetActive(false);
+        }
+
+
     }
 }
