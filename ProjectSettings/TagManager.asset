@@ -7,6 +7,7 @@ TagManager:
   - killer
   - goal
   - enemy
+  - coin
   layers:
   - Default
   - TransparentFX

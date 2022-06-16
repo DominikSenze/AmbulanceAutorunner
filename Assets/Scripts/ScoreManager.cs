@@ -9,18 +9,16 @@ public class ScoreManager : MonoBehaviour
 {
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI highScoreText;
-        
+
     public float scoreCount;
     public float highScoreCount;
 
-    public float pointsPerSec;
-    public bool scoreIncrease;
     
     // Start is called before the first frame update
     void Start()
     {
         //keeping the Highscore when closing and restarting game
-        if(PlayerPrefs.HasKey("HighScore"))
+        if (PlayerPrefs.HasKey("HighScore"))
         {
             highScoreCount = PlayerPrefs.GetFloat("HighScore");
         }
@@ -29,19 +27,14 @@ public class ScoreManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //increasing score
-        if (scoreIncrease)
-        {
-            scoreCount += pointsPerSec * Time.deltaTime;
-        }
         
         //increasing high score
-        if(scoreCount > highScoreCount)
+        if (scoreCount > highScoreCount)
         {
             highScoreCount = scoreCount;
             PlayerPrefs.SetFloat("HighScore", highScoreCount);
         }
-        
+
         //refreshing content of the text boxes with round numbers
         scoreText.text = "Score:  " + Mathf.Round(scoreCount);
         highScoreText.text = "High Score: " + Mathf.Round(highScoreCount);
@@ -52,4 +45,12 @@ public class ScoreManager : MonoBehaviour
         scoreCount += pointsToAdd;
     }
 
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.tag == "coin")
+        {
+            AddScore(20);
+        }
+    }
 }

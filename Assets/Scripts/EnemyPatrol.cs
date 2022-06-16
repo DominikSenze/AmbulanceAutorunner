@@ -47,7 +47,7 @@ public class EnemyPatrol : MonoBehaviour
     void Update()
     {
         
-            Patrol();
+        Patrol();
 
     }
 

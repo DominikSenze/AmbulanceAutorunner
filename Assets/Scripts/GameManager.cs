@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     private ScoreManager theScoreManager;
     private PlatformGenerator thePlatformGenerator;
     public DeathMenu theDeathScreen;
+  
 
 
 
@@ -40,17 +41,20 @@ public class GameManager : MonoBehaviour
     //functions for deathmenu
     public void RestartGame()
     {
-        theScoreManager.scoreIncrease = false; //stopping the score
-
+        Time.timeScale = 0; //freezing the screen
+        
         thePlayer.gameObject.SetActive(false); //player becomes invisible when dying
 
         theDeathScreen.gameObject.SetActive(true); //activates The DeathMenu
+        
 
         //StartCoroutine("RestartGameCo"); //Coroutine adds some time-delay before reseting the game
     }
 
     public void Reset()
     {
+        Time.timeScale = 1; //unfreezing the screen
+
         theDeathScreen.gameObject.SetActive(false); //deactivates The DeathMenu
 
         platformList = FindObjectsOfType<PlatformDestroyer>(); //finding all existing platforms
@@ -65,7 +69,6 @@ public class GameManager : MonoBehaviour
 
         //reseting score
         theScoreManager.scoreCount = 0;
-        theScoreManager.scoreIncrease = true;
 
         //reseting end of random platforms and goal platform
         thePlatformGenerator.platformCounter = 0;

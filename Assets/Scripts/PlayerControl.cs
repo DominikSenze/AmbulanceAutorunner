@@ -44,6 +44,10 @@ public class PlayerControl : MonoBehaviour
 
     
 
+    
+
+    
+
     // -------------------------------------------------------------------------------
     // Start is called before the first frame update
     void Start()
@@ -167,12 +171,22 @@ public class PlayerControl : MonoBehaviour
             speedMilestoneCount = speedMilestoneCountStore; //reseting milestones
             speedIncreaseMilestone = speedIncreaseMilestoneStore;
         }
-
-        if (other.gameObject.tag == "enemy" && hasPowerUp)
+        else if (other.gameObject.tag == "enemy" && hasPowerUp)
         {
             other.gameObject.SetActive(false);
         }
 
+        //winning the game by colliding with hospital
+        /*if(other.gameObject.tag == "goal")
+        {
+            Time.timeScale = 0;
+            
+
+        }*/
+
 
     }
+
+
+    
 }
