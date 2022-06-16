@@ -1929,7 +1929,7 @@ MonoBehaviour:
   maxHeightPoint: {fileID: 167573527}
   maxHeightChange: 7
   platformCounter: 0
-  platformCounterEnd: 30
+  platformCounterEnd: 2
   goalPlatform: {fileID: 6688363667360813956}
   randomCoinThreshold: 40
   randomEnemyThreshold: 50

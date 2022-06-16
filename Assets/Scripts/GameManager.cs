@@ -25,7 +25,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        Time.timeScale = 1;
+        
         platformStartPoint = platformGenerator.position;
         playerStartPoint = thePlayer.transform.position;
 
@@ -66,6 +67,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1; //unfreezing the screen
 
         theDeathScreen.gameObject.SetActive(false); //deactivates The DeathMenu
+        theWinScreen.gameObject.SetActive(false); //deactivate WinScreen
 
         platformList = FindObjectsOfType<PlatformDestroyer>(); //finding all existing platforms
         for (int i = 0; i < platformList.Length; i++) //all platforms will become invisible
