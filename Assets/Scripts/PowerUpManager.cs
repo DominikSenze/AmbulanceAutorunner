@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,11 +6,12 @@ using UnityEngine;
 public class PowerUpManager : MonoBehaviour
 {
     private bool powerUpActive;
-
     private float powerUpLengthCounter;
 
     private PlayerControl thePlayerControl;
-    private bool powerUpState;
+
+    public AudioSource powerUpSound;
+    public AudioSource powerUpFade;
 
     // Start is called before the first frame update
     void Start()
@@ -26,24 +28,28 @@ public class PowerUpManager : MonoBehaviour
 
             thePlayerControl.hasPowerUp = true;
 
+
             if (powerUpLengthCounter <= 0)
             {
-                thePlayerControl.hasPowerUp = powerUpState;
+                thePlayerControl.hasPowerUp = false;
 
                 powerUpActive = false;
+
+                powerUpFade.Play();
             }
         }
 
 
     }
 
+
     public void ActivatePowerUp(float duration)
     {
         powerUpLengthCounter = duration;
 
-        powerUpState = thePlayerControl.hasPowerUp;
-
         powerUpActive = true;
+
+        powerUpSound.Play();
     }
 
 }

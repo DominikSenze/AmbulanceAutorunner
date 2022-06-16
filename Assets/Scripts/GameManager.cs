@@ -16,8 +16,10 @@ public class GameManager : MonoBehaviour
     private ScoreManager theScoreManager;
     private PlatformGenerator thePlatformGenerator;
     public DeathMenu theDeathScreen;
-  
+    public WinMenu theWinScreen;
 
+    //Death Sound
+    public AudioSource crashSound;
 
 
     // Start is called before the first frame update
@@ -46,9 +48,17 @@ public class GameManager : MonoBehaviour
         thePlayer.gameObject.SetActive(false); //player becomes invisible when dying
 
         theDeathScreen.gameObject.SetActive(true); //activates The DeathMenu
-        
+
+        crashSound.Play();
 
         //StartCoroutine("RestartGameCo"); //Coroutine adds some time-delay before reseting the game
+    }
+
+    public void EndReached()
+    {
+        Time.timeScale = 0;
+
+        theWinScreen.gameObject.SetActive(true);
     }
 
     public void Reset()

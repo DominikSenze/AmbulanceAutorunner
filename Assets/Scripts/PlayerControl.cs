@@ -42,11 +42,11 @@ public class PlayerControl : MonoBehaviour
     //Checking if Powerup is collected
     public bool hasPowerUp;
 
-    
+    //Audio
+    public AudioSource jumpSound;
+    public AudioSource enemmyDeathSound;
 
-    
 
-    
 
     // -------------------------------------------------------------------------------
     // Start is called before the first frame update
@@ -112,6 +112,7 @@ public class PlayerControl : MonoBehaviour
                 myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, jumpForce);
 
                 canDoubleJump = true;
+                jumpSound.Play();
             }
 
             //for double jump
@@ -122,6 +123,7 @@ public class PlayerControl : MonoBehaviour
                 isJumping = false;
                 canDoubleJump = false;
                 isDoubleJumping = true;
+                jumpSound.Play();
             }
         }
 
@@ -174,15 +176,15 @@ public class PlayerControl : MonoBehaviour
         else if (other.gameObject.tag == "enemy" && hasPowerUp)
         {
             other.gameObject.SetActive(false);
+            enemmyDeathSound.Play();
         }
 
         //winning the game by colliding with hospital
-        /*if(other.gameObject.tag == "goal")
+        if(other.gameObject.tag == "goal")
         {
-            Time.timeScale = 0;
-            
+            theGameManager.EndReached();
 
-        }*/
+        }
 
 
     }

@@ -8,11 +8,15 @@ public class PickUpPoint : MonoBehaviour
 
     private ScoreManager theScoreManager;
 
+    private AudioSource coinSound;
+
 
     // Start is called before the first frame update
     void Start()
     {
         theScoreManager = FindObjectOfType<ScoreManager>();
+
+        coinSound = GameObject.Find("CoinSound").GetComponent<AudioSource>();
 
     }
 
@@ -28,6 +32,17 @@ public class PickUpPoint : MonoBehaviour
         {
             theScoreManager.AddScore(scoreToGive);
             gameObject.SetActive(false);
+
+            if (coinSound.isPlaying) //bugfix if coins are collected on high sound should be triggered on every coin
+            {
+                coinSound.Stop();
+                coinSound.Play();
+            }
+            else
+            {
+                coinSound.Play();
+            }
+
         }
     }
 }
